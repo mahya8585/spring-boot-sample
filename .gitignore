@@ -1,0 +1,74 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+# Note: package-lock.json is needed for CI/CD, not ignored
+
+# Production builds
+/build
+/dist
+frontend/build/
+backend/target/
+
+# Test coverage reports
+coverage/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# Note: .env with SKIP_PREFLIGHT_CHECK is needed for CI/CD, not ignored
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Spring Boot
+spring-boot-devtools.properties
+
+# H2 Database
+*.db
+*.trace.db
+*.lock.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Security and sensitive files
+*.key
+*.pem
+application-local.properties
+
+# Google Codelabs generated content
+docs/codelabs/*/
+!docs/codelabs/.gitkeep
+docs/preview/
+codelabs/*.html
+codelabs/**/index.html

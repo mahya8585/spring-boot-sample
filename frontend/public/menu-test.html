@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechBookStore Menu Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .menu-test { border: 1px solid #ccc; padding: 20px; margin: 10px 0; }
+        .test-button { background: #1976d2; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; }
+        .test-button:hover { background: #1565c0; }
+        .result { margin: 10px 0; padding: 10px; background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <h1>TechBookStore メニューテスト</h1>
+    
+    <div class="menu-test">
+        <h2>左側メニュー動作テスト</h2>
+        <p>以下のボタンをクリックして、各ページに遷移できるかテストします：</p>
+        
+        <button class="test-button" onclick="testMenu('/')">ダッシュボード</button>
+        <button class="test-button" onclick="testMenu('/books')">書籍管理</button>
+        <button class="test-button" onclick="testMenu('/inventory')">在庫管理</button>
+        <button class="test-button" onclick="testMenu('/orders')">注文管理</button>
+        <button class="test-button" onclick="testMenu('/customers')">顧客管理</button>
+        <button class="test-button" onclick="testMenu('/reports')">レポート</button>
+        
+        <div id="test-result" class="result">
+            テスト結果がここに表示されます
+        </div>
+    </div>
+
+    <div class="menu-test">
+        <h2>API接続テスト</h2>
+        <button class="test-button" onclick="testAPI()">API動作確認</button>
+        <div id="api-result" class="result">
+            API結果がここに表示されます
+        </div>
+    </div>
+
+    <script>
+        function testMenu(path) {
+            // 現在の時刻を記録
+            const timestamp = new Date().toLocaleString('ja-JP');
+            const resultDiv = document.getElementById('test-result');
+            
+            // メニューテスト実行
+            resultDiv.innerHTML = `
+                <strong>[${timestamp}] テスト実行中...</strong><br>
+                パス: ${path}<br>
+                現在のURL: ${window.location.href}<br>
+                遷移先: ${window.location.origin}${path}
+            `;
+            
+            // 実際にページ遷移
+            setTimeout(() => {
+                window.location.href = path;
+            }, 1000);
+        }
+        
+        async function testAPI() {
+            const resultDiv = document.getElementById('api-result');
+            const timestamp = new Date().toLocaleString('ja-JP');
+            
+            try {
+                resultDiv.innerHTML = `[${timestamp}] API接続テスト中...`;
+                
+                // バックエンドAPIテスト
+                const response = await fetch('/api/v1/books?page=0&size=3');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <strong>[${timestamp}] API接続成功！</strong><br>
+                    ステータス: ${response.status}<br>
+                    取得した書籍数: ${data.content ? data.content.length : 0}<br>
+                    総書籍数: ${data.totalElements || 'N/A'}<br>
+                    <details>
+                        <summary>レスポンスデータ（最初の書籍）</summary>
+                        <pre>${data.content && data.content[0] ? JSON.stringify(data.content[0], null, 2) : 'データなし'}</pre>
+                    </details>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <strong>[${timestamp}] API接続エラー</strong><br>
+                    エラー: ${error.message}<br>
+                    詳細: プロキシ設定やバックエンドの状態を確認してください
+                `;
+            }
+        }
+        
+        // ページ読み込み時の初期化
+        window.onload = function() {
+            const resultDiv = document.getElementById('test-result');
+            resultDiv.innerHTML = `
+                <strong>テスト準備完了</strong><br>
+                現在のURL: ${window.location.href}<br>
+                上のボタンをクリックしてメニューテストを開始してください
+            `;
+        };
+    </script>
+</body>
+</html>
