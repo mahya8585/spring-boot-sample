@@ -1,85 +1,82 @@
-# TechBookStore (Legacy Stack) — Full‑stack Sample Application
+# TechBookStore（レガシースタック）— フルスタックサンプルアプリケーション
 
-TechBookStore is a **working** sample application for a technical bookstore:
+TechBookStore は、技術書専門書店のための **動作する** サンプルアプリケーションです：
 
-- **Backend**: Spring Boot 2.3.12 (Java 8 target) REST API
-- **Frontend**: React 16 + Material‑UI 4 single‑page app
-- **Data**: H2 in-memory database for local development (seeded), PostgreSQL/Redis for staging/production-like profiles
-- **I18n**: Japanese / English UI
+- **バックエンド**: Spring Boot 2.3.12（Java 8 対応）REST API
+- **フロントエンド**: React 16 + Material-UI 4 シングルページアプリ
+- **データ**: ローカル開発用 H2 インメモリデータベース（シード済み）、ステージング/本番用 PostgreSQL/Redis
+- **I18n**: 日本語 / 英語 UI
 
-This repository intentionally uses an older stack to serve as a realistic “legacy baseline” for experimentation.
+このリポジトリは、現実的な「レガシー基盤」として実験できるよう、あえて古いスタックを採用しています。
 
-## What you can do with it
+## できること
 
-- Browse/search a book catalog and view/edit book details
-- Manage inventory operations (receive/sell/adjust, alerts, rotation/analysis)
-- Manage customers and orders
-- Explore dashboards and reports (sales/inventory/trends)
-- Switch UI language (JA/EN)
+- 書籍カタログの閲覧・検索、書籍詳細の表示・編集
+- 在庫管理操作（入庫/販売/調整、アラート、回転率・分析）
+- 顧客・注文管理
+- ダッシュボード・レポート（売上/在庫/トレンド）
+- UI 言語切替（日本語/英語）
 
-## Repository layout
+## リポジトリ構成
 
 - `backend/`: Spring Boot API
 - `frontend/`: React UI
-- `start-app.sh`: start backend + frontend together (writes logs and PID files to `/tmp`)
-- `status-app.sh`: check process + health status
-- `stop-app.sh`: stop processes (optionally `--clean-logs`)
-- `Dockerfile`: builds a single container image (frontend build + backend jar)
+- `start-app.sh`: バックエンド＋フロントエンド同時起動（ログ・PIDは `/tmp` に出力）
+- `status-app.sh`: プロセス・ヘルスチェック
+- `stop-app.sh`: プロセス停止（`--clean-logs` オプションあり）
+- `Dockerfile`: フロントエンドビルド＋バックエンド jar を 1 コンテナ化
 
-## Quickstart (local development)
+## クイックスタート（ローカル開発）
 
-### Prerequisites
+### 前提条件
 
-- JDK (Java **8** recommended; project compiles to Java 8 bytecode)
-- Node.js (older versions work best with Create React App 4; the Docker build uses Node 12)
+- JDK（Java **8** 推奨。Java 8 バイトコードでコンパイル）
+- Node.js（Create React App 4 との互換性のため古いバージョン推奨。Docker ビルドは Node 12）
 - npm
 
-If you use a newer Node.js and see `ERR_OSSL_EVP_UNSUPPORTED`, set `NODE_OPTIONS=--openssl-legacy-provider`.
+新しい Node.js で `ERR_OSSL_EVP_UNSUPPORTED` が出る場合は、`NODE_OPTIONS=--openssl-legacy-provider` を設定してください。
 
-### Option A: Run with the provided scripts
+### オプションA: 付属スクリプトで起動
 
-Start everything (backend + frontend):
+すべて起動（バックエンド＋フロントエンド）:
 
 ```bash
 ./start-app.sh
 ```
 
-Check status:
+ステータス確認:
 
 ```bash
 ./status-app.sh
 ```
 
-Stop:
+停止:
 
 ```bash
 ./stop-app.sh
 ```
 
-Notes:
+補足:
 
-- The scripts write logs to:
-
+- スクリプトは以下にログを出力します：
   - `/tmp/techbookstore_backend.log`
   - `/tmp/techbookstore_frontend.log`
-- The scripts store PIDs in:
-
+- PIDは以下に保存されます：
   - `/tmp/techbookstore_backend.pid`
   - `/tmp/techbookstore_frontend.pid`
-- `start-app.sh` expects the repository to be available at **`/workspace`**.
+- `start-app.sh` は **`/workspace`** 配下での実行を想定しています。
+  - Dev Container/コンテナ化ワークスペース以外の場合は、下記「オプションB（手動起動）」を利用してください。
 
-  - If you are not using a Dev Container / containerized workspace, use Option B below (manual start).
+### オプションB: 手動起動（どの環境でも動作）
 
-### Option B: Run manually (works in any environment)
-
-Backend (Spring Boot):
+バックエンド（Spring Boot）:
 
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
-Frontend (React):
+フロントエンド（React）:
 
 ```bash
 cd frontend
@@ -87,127 +84,125 @@ npm install
 npm start
 ```
 
-### URLs
+### アクセスURL
 
-- Frontend: http://localhost:3000
-- Backend health: http://localhost:8080/actuator/health
-- Swagger UI (Springfox): http://localhost:8080/swagger-ui.html
-- H2 Console (dev profile): http://localhost:8080/h2-console
-
+- フロントエンド: http://localhost:3000
+- バックエンドヘルス: http://localhost:8080/actuator/health
+- Swagger UI（Springfox）: http://localhost:8080/swagger-ui.html
+- H2 コンソール（dev プロファイル）: http://localhost:8080/h2-console
   - JDBC URL: `jdbc:h2:mem:testdb`
-  - Username: `sa`
-  - Password: (empty)
+  - ユーザー名: `sa`
+  - パスワード: （空欄）
 
-## Architecture overview
+## アーキテクチャ概要
 
-Frontend (React) calls the backend via HTTP:
+フロントエンド（React）は HTTP 経由でバックエンドにアクセスします：
 
-- Frontend dev server runs on `:3000`
-- Frontend `proxy` forwards API calls to `http://localhost:8080` (see `frontend/package.json`)
-- Backend exposes REST endpoints under `/api/v1/*`
+- フロントエンド開発サーバーは `:3000` で稼働
+- フロントエンドの `proxy` 設定で API を `http://localhost:8080` に転送（`frontend/package.json` 参照）
+- バックエンドは `/api/v1/*` 配下で REST エンドポイントを公開
 
-Data and caching:
+データ・キャッシュ：
 
-- **Dev profile** (`SPRING_PROFILES_ACTIVE=dev`, default): H2 in-memory DB and optional Redis (defaults to host `redis`)
-- **Staging profile**: local PostgreSQL (`jdbc:postgresql://localhost:5432/techbookstore`)
-- **Prod profile**: expects environment variables for PostgreSQL and Redis (see `backend/src/main/resources/application.yml`)
+- **dev プロファイル**（`SPRING_PROFILES_ACTIVE=dev`、デフォルト）：H2 インメモリDB＋オプションで Redis（デフォルトはホスト名 `redis`）
+- **staging プロファイル**：ローカル PostgreSQL（`jdbc:postgresql://localhost:5432/techbookstore`）
+- **prod プロファイル**：PostgreSQL/Redis の環境変数を期待（`backend/src/main/resources/application.yml` 参照）
 
-## Configuration
+## 設定
 
-Backend profiles are defined in `backend/src/main/resources/application.yml`.
+バックエンドのプロファイルは `backend/src/main/resources/application.yml` で定義されています。
 
-Common environment variables:
+主な環境変数：
 
-- `SPRING_PROFILES_ACTIVE`: `dev` (default), `staging`, `prod`
-- `CORS_ALLOWED_ORIGINS`: default `http://localhost:3000`
+- `SPRING_PROFILES_ACTIVE`: `dev`（デフォルト）、`staging`、`prod`
+- `CORS_ALLOWED_ORIGINS`: デフォルト `http://localhost:3000`
 
-Dev profile (Redis is optional):
+Dev プロファイル（Redisは任意）：
 
-- `REDIS_HOST` (default: `redis`)
-- `REDIS_PORT` (default: `6379`)
+- `REDIS_HOST`（デフォルト: `redis`）
+- `REDIS_PORT`（デフォルト: `6379`）
 
-If you do not have Redis available locally, force an in-memory cache with:
+ローカルで Redis が無い場合は、インメモリキャッシュを強制できます：
 
-- `SPRING_CACHE_TYPE=simple` (equivalent to `spring.cache.type=simple`)
+- `SPRING_CACHE_TYPE=simple`（`spring.cache.type=simple` と同等）
 
-Staging profile (PostgreSQL):
+Staging プロファイル（PostgreSQL）：
 
-- `DB_USERNAME` (default: `postgres`)
-- `DB_PASSWORD` (default: `postgres`)
+- `DB_USERNAME`（デフォルト: `postgres`）
+- `DB_PASSWORD`（デフォルト: `postgres`）
 
-Prod profile variables are currently named with an `AZURE_*` prefix (from the original deployment setup):
+Prod プロファイルの変数は `AZURE_*` プレフィックス（Azure 用）です：
 
 - `AZURE_POSTGRESQL_HOST`, `AZURE_POSTGRESQL_DATABASE`, `AZURE_POSTGRESQL_USERNAME`, `AZURE_POSTGRESQL_PASSWORD`
 - `AZURE_REDIS_HOST`, `AZURE_REDIS_KEY`
 
-## Data model and seed data
+## データモデルとシードデータ
 
-In the default dev profile, the database is created on startup and seeded from:
+デフォルトの dev プロファイルでは、DB は起動時に作成され、
+`backend/src/main/resources/data.sql` からシードされます。
 
-- `backend/src/main/resources/data.sql`
+## API 概要
 
-## API overview
+主な API グループ（すべて `/api/v1` 配下）：
 
-High-level API groups (all under `/api/v1`):
+- `/books`: 書籍カタログ操作
+- `/inventory`: 在庫操作・分析
+- `/reports`: ダッシュボード・レポート系エンドポイント
 
-- `/books`: book catalog operations
-- `/inventory`: inventory operations and analytics
-- `/reports`: dashboards and reporting endpoints
+API ドキュメントは Springfox（Swagger 2）で `/swagger-ui.html` から参照できます。
 
-API docs are exposed via Springfox (Swagger 2) at `/swagger-ui.html`.
+## テスト
 
-## Testing
-
-Backend:
+バックエンド：
 
 ```bash
 cd backend
 ./mvnw test
 ```
 
-Frontend:
+フロントエンド：
 
 ```bash
 cd frontend
 npm test
 ```
 
-CI-style frontend tests:
+CI スタイルのフロントエンドテスト：
 
 ```bash
 cd frontend
 npm run test:ci
 ```
 
-I18n validation helper:
+I18n バリデーション補助：
 
-- `validate-i18n.sh` exists, but it is currently hardcoded for a GitHub Actions runner path and may not work locally without adjustment.
+- `validate-i18n.sh` がありますが、GitHub Actions ランナー用パスでハードコーディングされているため、ローカルでは調整が必要な場合があります。
 
 ## Docker
 
-The root `Dockerfile` builds:
+ルートの `Dockerfile` で以下をビルドします：
 
-1) the frontend static build, then
-2) the backend jar, and
-3) runs the backend on port `8080`.
+1) フロントエンドの静的ビルド
+2) バックエンド jar
+3) バックエンドをポート `8080` で起動
 
-Important:
+重要：
 
-- The container sets `SPRING_PROFILES_ACTIVE=prod` by default.
-- In `prod`, the backend expects PostgreSQL/Redis environment variables (see “Configuration”).
+- コンテナはデフォルトで `SPRING_PROFILES_ACTIVE=prod` を設定します。
+- `prod` では、バックエンドは PostgreSQL/Redis の環境変数を期待します（「設定」参照）。
 
-## Security and production notes
+## セキュリティ・本番利用時の注意
 
-This repository is a sample app.
+このリポジトリはサンプルアプリです。
 
-- Some configuration (including security) is intentionally simplified for demo and local use.
-- Review and harden settings before using it as a production template.
+- 一部の設定（セキュリティ含む）はデモ・ローカル用に簡略化されています。
+- 本番テンプレートとして利用する場合は、必ず設定を見直し・強化してください。
 
-## License
+## ライセンス
 
-Released under the [MIT license](https://gist.githubusercontent.com/shinyay/56e54ee4c0e22db8211e05e70a63247e/raw/f3ac65a05ed8c8ea70b653875ccac0c6dbc10ba1/LICENSE)
+[MIT ライセンス](https://gist.githubusercontent.com/shinyay/56e54ee4c0e22db8211e05e70a63247e/raw/f3ac65a05ed8c8ea70b653875ccac0c6dbc10ba1/LICENSE) で公開しています。
 
-## Author
+## 著者
 
 - GitHub: <https://github.com/shinyay>
 - Twitter: <https://twitter.com/yanashin18618>
