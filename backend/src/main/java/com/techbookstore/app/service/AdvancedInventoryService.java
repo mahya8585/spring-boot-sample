@@ -52,7 +52,7 @@ public class AdvancedInventoryService {
      */
     public TransferResult transferStock(StockTransferRequest request) {
         Optional<Inventory> inventoryOpt = inventoryRepository.findById(request.getInventoryId());
-        if (!inventoryOpt.isPresent()) {
+        if (inventoryOpt.isEmpty()) {
             throw new InventoryNotFoundException(request.getInventoryId());
         }
 
@@ -101,7 +101,7 @@ public class AdvancedInventoryService {
      */
     public ReservationResult reserveStock(StockReservationRequest request) {
         Optional<Inventory> inventoryOpt = inventoryRepository.findById(request.getInventoryId());
-        if (!inventoryOpt.isPresent()) {
+        if (inventoryOpt.isEmpty()) {
             throw new InventoryNotFoundException(request.getInventoryId());
         }
 
@@ -143,7 +143,7 @@ public class AdvancedInventoryService {
      */
     public void releaseReservation(Long reservationId) {
         Optional<InventoryReservation> reservationOpt = reservationRepository.findById(reservationId);
-        if (!reservationOpt.isPresent()) {
+        if (reservationOpt.isEmpty()) {
             throw new RuntimeException("Reservation not found: " + reservationId);
         }
 

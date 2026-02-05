@@ -1,7 +1,6 @@
 package com.techbookstore.app.controller;
 
 import com.techbookstore.app.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,6 @@ public class I18nController {
     
     private final MessageService messageService;
     
-    @Autowired
     public I18nController(MessageService messageService) {
         this.messageService = messageService;
     }

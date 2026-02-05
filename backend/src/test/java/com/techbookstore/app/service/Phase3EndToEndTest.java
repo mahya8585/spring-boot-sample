@@ -132,7 +132,7 @@ public class Phase3EndToEndTest {
         System.out.println("Testing Demand Forecasting...");
         
         // Get the first book
-        Book book = bookRepository.findAll().get(0);
+        Book book = bookRepository.findAll().getFirst();
         LocalDate forecastDate = LocalDate.now().plusDays(30);
         
         // Generate forecasts
@@ -168,7 +168,7 @@ public class Phase3EndToEndTest {
         System.out.println("Testing Optimal Stock Calculation...");
         
         // Get the first book
-        Book book = bookRepository.findAll().get(0);
+        Book book = bookRepository.findAll().getFirst();
         
         // Calculate optimal stock
         OptimalStockDto optimalStock = optimalStockCalculatorService.calculateOptimalStock(book.getId());
@@ -199,7 +199,7 @@ public class Phase3EndToEndTest {
         
         // Create candidate books with stock data
         List<OptimalStockDto> candidateBooks = Arrays.asList(
-            createTestOptimalStock(books.get(0).getId(), "REORDER_NEEDED"),
+            createTestOptimalStock(books.getFirst().getId(), "REORDER_NEEDED"),
             createTestOptimalStock(books.get(1).getId(), "UNDERSTOCK")
         );
         
@@ -230,7 +230,7 @@ public class Phase3EndToEndTest {
         try {
             // Get test books
             List<Book> books = bookRepository.findAll();
-            List<Long> bookIds = Arrays.asList(books.get(0).getId(), books.get(1).getId());
+            List<Long> bookIds = Arrays.asList(books.getFirst().getId(), books.get(1).getId());
             
             // Test intelligent ordering - this should not fail even if the implementation isn't complete
             try {

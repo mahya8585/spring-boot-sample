@@ -82,7 +82,7 @@ public class TechTrendAnalysisService {
         logger.info("Analyzing tech trends for category: {}", categoryCode);
         
         Optional<TechCategory> categoryOpt = techCategoryRepository.findByCategoryCode(categoryCode);
-        if (!categoryOpt.isPresent()) {
+        if (categoryOpt.isEmpty()) {
             throw new IllegalArgumentException("Tech category not found: " + categoryCode);
         }
         
@@ -224,7 +224,7 @@ public class TechTrendAnalysisService {
             return new TechCategoryAnalysisDto.TechCategoryMetrics(0, BigDecimal.ZERO, BigDecimal.ZERO);
         }
         
-        TechTrendAnalysis latest = trends.get(0);
+        TechTrendAnalysis latest = trends.getFirst();
         
         TechCategoryAnalysisDto.TechCategoryMetrics metrics = new TechCategoryAnalysisDto.TechCategoryMetrics();
         metrics.setTotalRevenue(latest.getTotalRevenue() != null ? latest.getTotalRevenue() : BigDecimal.ZERO);
@@ -241,7 +241,7 @@ public class TechTrendAnalysisService {
             return new TechCategoryAnalysisDto.TechCategoryTrend("STABLE", BigDecimal.ZERO, "LOW");
         }
         
-        TechTrendAnalysis latest = trends.get(0);
+        TechTrendAnalysis latest = trends.getFirst();
         
         String trendDirection = latest.getTrendDirection() != null ? latest.getTrendDirection().name() : "STABLE";
         BigDecimal growthRate = latest.getGrowthRate() != null ? latest.getGrowthRate() : BigDecimal.ZERO;
@@ -281,7 +281,7 @@ public class TechTrendAnalysisService {
                 // Get revenue and market share for subcategory
                 List<TechTrendAnalysis> subTrends = trendAnalysisRepository.findByTechCategoryCode(subCat.getCategoryCode());
                 if (!subTrends.isEmpty()) {
-                    TechTrendAnalysis latest = subTrends.get(0);
+                    TechTrendAnalysis latest = subTrends.getFirst();
                     analysis.setRevenue(latest.getTotalRevenue());
                     analysis.setMarketShare(latest.getMarketShare());
                 }
@@ -298,7 +298,7 @@ public class TechTrendAnalysisService {
             return new TechCategoryAnalysisDto.TechLifecycleAnalysis("MATURITY", 18, "STABLE");
         }
         
-        TechTrendAnalysis latest = trends.get(0);
+        TechTrendAnalysis latest = trends.getFirst();
         String currentStage = latest.getLifecycleStage() != null ? latest.getLifecycleStage().name() : "MATURITY";
         
         TechCategoryAnalysisDto.TechLifecycleAnalysis lifecycle = new TechCategoryAnalysisDto.TechLifecycleAnalysis();

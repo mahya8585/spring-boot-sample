@@ -308,14 +308,14 @@ public class SeasonalAnalysisService {
      */
     private String generateSeasonalRecommendation(String season, List<String> topCategories) {
         SeasonalPattern pattern = TECH_SEASONAL_PATTERNS.get(season);
-        String topCategory = topCategories.isEmpty() ? "技術書全般" : topCategories.get(0);
+        String topCategory = topCategories.isEmpty() ? "技術書全般" : topCategories.getFirst();
         
-        return String.format("%s期間中は%sを重点に、%s分野で%.0f%%の需要増加が予想されます。" +
-                           "在庫レベルを事前に調整し、マーケティング活動を強化することを推奨します。",
-                           pattern.getDescription(),
-                           topCategory,
-                           String.join("、", topCategories),
-                           (pattern.getDemandMultiplier() - 1) * 100);
+        return ("%s期間中は%sを重点に、%s分野で%.0f%%の需要増加が予想されます。" +
+            "在庫レベルを事前に調整し、マーケティング活動を強化することを推奨します。").formatted(
+            pattern.getDescription(),
+            topCategory,
+            String.join("、", topCategories),
+            (pattern.getDemandMultiplier() - 1) * 100);
     }
 
     /**
@@ -342,16 +342,16 @@ public class SeasonalAnalysisService {
         
         if (nextMultiplier.compareTo(currentMultiplier) > 0) {
             action = "在庫増加";
-            reason = String.format("次期（%s）の需要増加（%.0f%% → %.0f%%）に備える",
-                                 nextSeason,
-                                 (currentMultiplier.doubleValue() - 1) * 100,
-                                 (nextMultiplier.doubleValue() - 1) * 100);
+            reason = "次期（%s）の需要増加（%.0f%% → %.0f%%）に備える".formatted(
+                nextSeason,
+                (currentMultiplier.doubleValue() - 1) * 100,
+                (nextMultiplier.doubleValue() - 1) * 100);
         } else if (nextMultiplier.compareTo(currentMultiplier) < 0) {
             action = "在庫調整";
-            reason = String.format("次期（%s）の需要減少（%.0f%% → %.0f%%）に対応",
-                                 nextSeason,
-                                 (currentMultiplier.doubleValue() - 1) * 100,
-                                 (nextMultiplier.doubleValue() - 1) * 100);
+            reason = "次期（%s）の需要減少（%.0f%% → %.0f%%）に対応".formatted(
+                nextSeason,
+                (currentMultiplier.doubleValue() - 1) * 100,
+                (nextMultiplier.doubleValue() - 1) * 100);
         } else {
             action = "現状維持";
             reason = "季節変動が小さく、安定した需要が予想される";
