@@ -157,7 +157,7 @@ public class Phase3EndToEndTest {
         forecasts.forEach(f -> {
             assertTrue(f.getPredictedDemand() > 0, 
                 "Forecast for " + f.getAlgorithm() + " should have positive demand");
-            assertTrue(f.getConfidence() > 0, 
+            assertTrue(f.getConfidence().compareTo(java.math.BigDecimal.ZERO) > 0, 
                 "Forecast for " + f.getAlgorithm() + " should have positive confidence");
         });
         

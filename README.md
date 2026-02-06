@@ -2,12 +2,11 @@
 
 TechBookStore は、技術書専門書店のための **動作する** サンプルアプリケーションです：
 
-- **バックエンド**: Spring Boot 2.3.12（Java 8 対応）REST API
+- **バックエンド**: Spring Boot 3.5.0（Java 21）REST API
 - **フロントエンド**: React 16 + Material-UI 4 シングルページアプリ
 - **データ**: ローカル開発用 H2 インメモリデータベース（シード済み）、ステージング/本番用 PostgreSQL/Redis
 - **I18n**: 日本語 / 英語 UI
 
-このリポジトリは、現実的な「レガシー基盤」として実験できるよう、あえて古いスタックを採用しています。
 
 ## できること
 
@@ -30,7 +29,7 @@ TechBookStore は、技術書専門書店のための **動作する** サンプ
 
 ### 前提条件
 
-- JDK（Java **8** 推奨。Java 8 バイトコードでコンパイル）
+- JDK 21
 - Node.js（Create React App 4 との互換性のため古いバージョン推奨。Docker ビルドは Node 12）
 - npm
 
@@ -88,7 +87,8 @@ npm start
 
 - フロントエンド: http://localhost:3000
 - バックエンドヘルス: http://localhost:8080/actuator/health
-- Swagger UI（Springfox）: http://localhost:8080/swagger-ui.html
+- Swagger UI（springdoc-openapi）: http://localhost:8080/swagger-ui/index.html
+- OpenAPI仕様（JSON）: http://localhost:8080/v3/api-docs
 - H2 コンソール（dev プロファイル）: http://localhost:8080/h2-console
   - JDBC URL: `jdbc:h2:mem:testdb`
   - ユーザー名: `sa`
@@ -149,7 +149,7 @@ Prod プロファイルの変数は `AZURE_*` プレフィックス（Azure 用�
 - `/inventory`: 在庫操作・分析
 - `/reports`: ダッシュボード・レポート系エンドポイント
 
-API ドキュメントは Springfox（Swagger 2）で `/swagger-ui.html` から参照できます。
+API ドキュメントは springdoc-openapi（OpenAPI 3）で `/swagger-ui/index.html` から参照できます。
 
 ## テスト
 
@@ -202,8 +202,12 @@ I18n バリデーション補助：
 
 [MIT ライセンス](https://gist.githubusercontent.com/shinyay/56e54ee4c0e22db8211e05e70a63247e/raw/f3ac65a05ed8c8ea70b653875ccac0c6dbc10ba1/LICENSE) で公開しています。
 
-## 著者
+## 元著者
 
 - GitHub: <https://github.com/shinyay>
 - Twitter: <https://twitter.com/yanashin18618>
 - Mastodon: <https://mastodon.social/@yanashin>
+
+## 変更者
+- GitHub: <https://github.com/mahya8585>
+- Twitter: <https://twitter.com/maaya8585>
