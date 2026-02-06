@@ -14,6 +14,6 @@ public class OrderNotFoundException extends RuntimeException {
     }
     
     public OrderNotFoundException(String field, Object value) {
-        super(String.format("Order not found with %s: %s", field, value));
+        super("Order not found with %s: %s".formatted(field, value));
     }
 }

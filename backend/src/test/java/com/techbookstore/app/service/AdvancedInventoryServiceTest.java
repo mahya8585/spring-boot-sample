@@ -19,7 +19,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AdvancedInventoryServiceTest {
@@ -134,8 +135,8 @@ class AdvancedInventoryServiceTest {
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(TransactionType.RECEIVE, result.get(0).getType());
-        assertEquals(5, result.get(0).getQuantity());
+        assertEquals(TransactionType.RECEIVE, result.getFirst().getType());
+        assertEquals(5, result.getFirst().getQuantity());
     }
 
     @Test

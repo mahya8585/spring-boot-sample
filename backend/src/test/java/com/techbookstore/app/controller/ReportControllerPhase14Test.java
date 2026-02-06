@@ -1,6 +1,7 @@
 package com.techbookstore.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techbookstore.app.config.TestSecurityConfig;
 import com.techbookstore.app.dto.CustomReportRequest;
 import com.techbookstore.app.dto.ReportTemplateDto;
 import com.techbookstore.app.service.CustomReportService;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * レポート機能のテストクラス
  */
 @WebMvcTest(ReportController.class)
+@Import(TestSecurityConfig.class)
 public class ReportControllerPhase14Test {
 
     @Autowired

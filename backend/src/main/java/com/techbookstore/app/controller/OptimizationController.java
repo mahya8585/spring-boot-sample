@@ -205,7 +205,7 @@ public class OptimizationController {
             .count();
         
         if (criticalBooks > 0) {
-            recommendations.add(String.format("Immediate action required: %d books need reordering", criticalBooks));
+            recommendations.add("Immediate action required: %d books need reordering".formatted(criticalBooks));
         }
         
         // Budget recommendations

@@ -13,6 +13,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -135,8 +136,8 @@ public class ReportService {
         
         BigDecimal totalInventoryValue = new BigDecimal(totalProducts * 3500);
         BigDecimal deadStockValue = totalInventoryValue.multiply(new BigDecimal("0.08"));
-        Double averageTurnoverRate = 4.2 + (Math.random() * 2 - 1); // 3.2 - 5.2 range
-        Double obsolescenceRiskIndex = Math.random() * 100; // 0-100 scale
+        Double averageTurnoverRate = 4.2 + (ThreadLocalRandom.current().nextDouble() * 2 - 1); // 3.2 - 5.2 range
+        Double obsolescenceRiskIndex = ThreadLocalRandom.current().nextDouble() * 100; // 0-100 scale
         
         return new InventoryMetrics(totalProducts, lowStockCount, outOfStockCount, deadStockCount,
                                    totalInventoryValue, deadStockValue, averageTurnoverRate, obsolescenceRiskIndex);
@@ -395,8 +396,8 @@ public class ReportService {
         while (!current.isAfter(endDate) && trends.size() < 30) {
             trends.add(new SalesReportDto.SalesTrendItem(
                 current, 
-                new BigDecimal(1500 + (int)(Math.random() * 1000)), 
-                4 + (int)(Math.random() * 8)
+                new BigDecimal(1500 + (int)(ThreadLocalRandom.current().nextDouble() * 1000)), 
+                4 + (int)(ThreadLocalRandom.current().nextDouble() * 8)
             ));
             current = current.plusDays(1);
         }
@@ -454,8 +455,8 @@ public class ReportService {
         
         LocalDate current = LocalDate.now().minusDays(30);
         for (int i = 0; i < 30; i++) {
-            newCustomers.add(new CustomerAnalyticsDto.CustomerTrendItem(current, 1 + (int)(Math.random() * 3), new BigDecimal("1500.00")));
-            returningCustomers.add(new CustomerAnalyticsDto.CustomerTrendItem(current, 3 + (int)(Math.random() * 5), new BigDecimal("3500.00")));
+            newCustomers.add(new CustomerAnalyticsDto.CustomerTrendItem(current, 1 + (int)(ThreadLocalRandom.current().nextDouble() * 3), new BigDecimal("1500.00")));
+            returningCustomers.add(new CustomerAnalyticsDto.CustomerTrendItem(current, 3 + (int)(ThreadLocalRandom.current().nextDouble() * 5), new BigDecimal("3500.00")));
             current = current.plusDays(1);
         }
         

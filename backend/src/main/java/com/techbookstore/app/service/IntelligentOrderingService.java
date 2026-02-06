@@ -370,7 +370,7 @@ public class IntelligentOrderingService {
             .count();
         
         if (reorderNeeded > 0) {
-            return String.format("%d books need immediate reordering", reorderNeeded);
+            return "%d books need immediate reordering".formatted(reorderNeeded);
         }
         
         switch (orderType) {
@@ -484,7 +484,7 @@ public class IntelligentOrderingService {
         if (oldBooks > 0) {
             OrderSuggestionDto.RiskFactor obsolescenceRisk = new OrderSuggestionDto.RiskFactor();
             obsolescenceRisk.setRiskType("TECH_OBSOLESCENCE");
-            obsolescenceRisk.setDescription(String.format("%d books have high obsolescence risk", oldBooks));
+            obsolescenceRisk.setDescription("%d books have high obsolescence risk".formatted(oldBooks));
             obsolescenceRisk.setSeverity("MEDIUM");
             obsolescenceRisk.setProbabilityPercentage(BigDecimal.valueOf(60));
             obsolescenceRisk.setMitigation("Reduce order quantities for older titles");

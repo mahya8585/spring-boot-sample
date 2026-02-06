@@ -659,9 +659,9 @@ public class AnalyticsService {
         
         suggestions.add(new OrderSuggestionDto.BookOrderSuggestion(1L, "Java: The Complete Reference", 
                                                                    10, 25, new BigDecimal("45.00"), "LOW_STOCK"));
-        suggestions.get(0).setTotalCost(suggestions.get(0).getUnitCost().multiply(new BigDecimal(25)));
-        suggestions.get(0).setUrgency("WITHIN_WEEK");
-        suggestions.get(0).setDaysUntilStockout(7);
+        suggestions.getFirst().setTotalCost(suggestions.getFirst().getUnitCost().multiply(new BigDecimal(25)));
+        suggestions.getFirst().setUrgency("WITHIN_WEEK");
+        suggestions.getFirst().setDaysUntilStockout(7);
         
         return suggestions;
     }

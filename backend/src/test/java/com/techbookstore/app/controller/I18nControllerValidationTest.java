@@ -1,11 +1,13 @@
 package com.techbookstore.app.controller;
 
+import com.techbookstore.app.config.TestSecurityConfig;
 import com.techbookstore.app.service.MessageService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Map;
@@ -19,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(I18nController.class)
+@Import(TestSecurityConfig.class)
 class I18nControllerValidationTest {
 
     @Autowired

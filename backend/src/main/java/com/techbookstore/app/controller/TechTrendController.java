@@ -85,7 +85,7 @@ public class TechTrendController {
      */
     @GetMapping("/correlations")
     public ResponseEntity<Map<String, Object>> getTechnologyCorrelations(
-            @RequestParam(value = "minCorrelation", defaultValue = "0.3") Double minCorrelation) {
+            @RequestParam(defaultValue = "0.3") Double minCorrelation) {
         try {
             logger.info("Getting technology correlations with minimum correlation: {}", minCorrelation);
             Map<String, Object> correlations = techTrendAnalysisService.generateTechnologyCorrelations();
@@ -118,7 +118,7 @@ public class TechTrendController {
      */
     @GetMapping("/investment-recommendations")
     public ResponseEntity<List<Map<String, Object>>> getInvestmentRecommendations(
-            @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+            @RequestParam(defaultValue = "10") Integer limit) {
         try {
             logger.info("Getting investment recommendations with limit: {}", limit);
             List<Map<String, Object>> recommendations = techTrendAnalysisService.generateInvestmentRecommendations();
