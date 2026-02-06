@@ -1,6 +1,7 @@
 package com.techbookstore.app.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -26,7 +27,7 @@ public class DemandForecast {
     private String algorithm = "SEASONAL";
 
     @Column(name = "confidence", nullable = false, precision = 5, scale = 4)
-    private Double confidence = 0.7500;
+    private BigDecimal confidence = new BigDecimal("0.7500");
 
     @Column(name = "parameters", columnDefinition = "TEXT")
     private String parameters;
@@ -37,7 +38,7 @@ public class DemandForecast {
     // Constructors
     public DemandForecast() {}
 
-    public DemandForecast(Book book, LocalDate forecastDate, Integer predictedDemand, String algorithm, Double confidence) {
+    public DemandForecast(Book book, LocalDate forecastDate, Integer predictedDemand, String algorithm, BigDecimal confidence) {
         this.book = book;
         this.forecastDate = forecastDate;
         this.predictedDemand = predictedDemand;
@@ -67,8 +68,8 @@ public class DemandForecast {
     public String getAlgorithm() { return algorithm; }
     public void setAlgorithm(String algorithm) { this.algorithm = algorithm; }
 
-    public Double getConfidence() { return confidence; }
-    public void setConfidence(Double confidence) { this.confidence = confidence; }
+    public BigDecimal getConfidence() { return confidence; }
+    public void setConfidence(BigDecimal confidence) { this.confidence = confidence; }
 
     public String getParameters() { return parameters; }
     public void setParameters(String parameters) { this.parameters = parameters; }

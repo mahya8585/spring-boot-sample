@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -157,7 +157,7 @@ public class Phase3EndToEndTest {
         forecasts.forEach(f -> {
             assertTrue(f.getPredictedDemand() > 0, 
                 "Forecast for " + f.getAlgorithm() + " should have positive demand");
-            assertTrue(f.getConfidence() > 0, 
+            assertTrue(f.getConfidence().compareTo(java.math.BigDecimal.ZERO) > 0, 
                 "Forecast for " + f.getAlgorithm() + " should have positive confidence");
         });
         
