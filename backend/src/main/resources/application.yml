@@ -42,16 +42,20 @@ spring:
       data-locations: classpath:data.sql
   # Redis設定（Dev Container環境）
   redis:
-    host: ${REDIS_HOST:redis}
-    port: ${REDIS_PORT:6379}
-    database: 0
-    timeout: 2000ms
     lettuce:
       pool:
         max-active: 10
         max-idle: 10
         min-idle: 1
         max-wait: -1ms
+  # Redis設定（Dev Container環境）
+  data.redis.database: 0
+  # Redis設定（Dev Container環境）
+  data.redis.host: ${REDIS_HOST:redis}
+  # Redis設定（Dev Container環境）
+  data.redis.port: ${REDIS_PORT:6379}
+  # Redis設定（Dev Container環境）
+  data.redis.timeout: 2000ms
 
 app:
   cors:
@@ -94,11 +98,10 @@ spring:
       ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     show-sql: false
-  redis:
-    host: ${AZURE_REDIS_HOST}
-    port: 6380
-    password: ${AZURE_REDIS_KEY}
-    ssl: true
+  data.redis.host: ${AZURE_REDIS_HOST}
+  data.redis.password: ${AZURE_REDIS_KEY}
+  data.redis.port: 6380
+  data.redis.ssl.enabled: true
 
 app:
   cors:
