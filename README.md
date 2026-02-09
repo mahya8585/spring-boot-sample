@@ -35,38 +35,8 @@ TechBookStore は、技術書専門書店のための **動作する** サンプ
 
 新しい Node.js で `ERR_OSSL_EVP_UNSUPPORTED` が出る場合は、`NODE_OPTIONS=--openssl-legacy-provider` を設定してください。
 
-### オプションA: 付属スクリプトで起動
 
-すべて起動（バックエンド＋フロントエンド）:
-
-```bash
-./start-app.sh
-```
-
-ステータス確認:
-
-```bash
-./status-app.sh
-```
-
-停止:
-
-```bash
-./stop-app.sh
-```
-
-補足:
-
-- スクリプトは以下にログを出力します：
-  - `/tmp/techbookstore_backend.log`
-  - `/tmp/techbookstore_frontend.log`
-- PIDは以下に保存されます：
-  - `/tmp/techbookstore_backend.pid`
-  - `/tmp/techbookstore_frontend.pid`
-- `start-app.sh` は **`/workspace`** 配下での実行を想定しています。
-  - Dev Container/コンテナ化ワークスペース以外の場合は、下記「オプションB（手動起動）」を利用してください。
-
-### オプションB: 手動起動（どの環境でも動作）
+### 手動起動（どの環境でも動作）
 
 バックエンド（Spring Boot）:
 
