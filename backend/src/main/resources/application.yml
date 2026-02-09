@@ -25,7 +25,7 @@ spring:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
-    password: 
+    # password: REDACTED - Migrated to Azure Key Vault 
   h2:
     console:
       enabled: true
@@ -56,6 +56,9 @@ spring:
   data.redis.port: ${REDIS_PORT:6379}
   # Redis設定（Dev Container環境）
   data.redis.timeout: 2000ms
+
+# Replace <your-vault-name> with your actual Azure Key Vault name
+azure.keyvault.uri: https://<your-vault-name>.vault.azure.net
 
 app:
   cors:
