@@ -16,6 +16,15 @@ spring:
     encoding: UTF-8
     fallback-to-system-locale: false
     use-code-as-default-message: false
+  # Azure Key Vault Configuration
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          property-sources:
+            - endpoint: ${AZURE_KEYVAULT_ENDPOINT}
+              credential:
+                managed-identity-enabled: true
 
 ---
 # 開発環境（H2 Database）
@@ -73,8 +82,8 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/techbookstore
     driver-class-name: org.postgresql.Driver
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    username: ${db-username}
+    password: ${db-password}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -90,16 +99,16 @@ app:
 spring:
   config.activate.on-profile: prod
   datasource:
-    url: jdbc:postgresql://${AZURE_POSTGRESQL_HOST}:5432/${AZURE_POSTGRESQL_DATABASE}?ssl=true&sslmode=require
-    username: ${AZURE_POSTGRESQL_USERNAME}
-    password: ${AZURE_POSTGRESQL_PASSWORD}
+    url: jdbc:postgresql://${azure-postgresql-host}:5432/${azure-postgresql-database}?ssl=true&sslmode=require
+    username: ${azure-postgresql-username}
+    password: ${azure-postgresql-password}
   jpa:
     hibernate:
       ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     show-sql: false
-  data.redis.host: ${AZURE_REDIS_HOST}
-  data.redis.password: ${AZURE_REDIS_KEY}
+  data.redis.host: ${azure-redis-host}
+  data.redis.password: ${azure-redis-key}
   data.redis.port: 6380
   data.redis.ssl.enabled: true
 
