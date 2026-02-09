@@ -20,6 +20,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <h2.version>2.2.224</h2.version>
         <postgresql.version>42.7.7</postgresql.version>
+        <spring-cloud-azure.version>5.20.0</spring-cloud-azure.version>
     </properties>
 
     <dependencies>
@@ -27,6 +28,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- Azure Key Vault Integration -->
+        <dependency>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>spring-cloud-azure-starter-keyvault-secrets</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -93,6 +100,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.azure.spring</groupId>
+                <artifactId>spring-cloud-azure-dependencies</artifactId>
+                <version>${spring-cloud-azure.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
