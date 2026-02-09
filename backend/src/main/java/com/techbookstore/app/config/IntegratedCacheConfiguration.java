@@ -27,12 +27,12 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 public class IntegratedCacheConfiguration {
-    
+
     @Bean
     @Primary
     @ConditionalOnBean(RedisConnectionFactory.class)
     @ConditionalOnProperty(name = "spring.cache.type", havingValue = "redis", matchIfMissing = true)
-    public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
+    CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager
             .builder(connectionFactory)
             .cacheDefaults(cacheConfiguration());
@@ -76,10 +76,10 @@ public class IntegratedCacheConfiguration {
         
         return builder.withInitialCacheConfigurations(cacheConfigurations).build();
     }
-    
+
     @Bean
     @ConditionalOnProperty(name = "spring.cache.type", havingValue = "simple")
-    public CacheManager simpleCacheManager() {
+    CacheManager simpleCacheManager() {
         // Simple cache manager for test environments
         ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
         cacheManager.setCacheNames(java.util.Arrays.asList(

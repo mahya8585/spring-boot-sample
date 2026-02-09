@@ -125,7 +125,7 @@ public class DemandForecastService {
         
         int predictedDemand = Math.max(1, (int) Math.round(averageDemand * periodMonths));
         
-        return new DemandForecast(book, forecastDate, predictedDemand, "MOVING_AVERAGE", 0.70);
+        return new DemandForecast(book, forecastDate, predictedDemand, "MOVING_AVERAGE", new java.math.BigDecimal("0.70"));
     }
 
     /**
@@ -142,7 +142,7 @@ public class DemandForecastService {
         Map<LocalDate, Integer> monthlyDemand = getMonthlyDemandData(book, historicalOrders);
         
         if (monthlyDemand.isEmpty()) {
-            return new DemandForecast(book, forecastDate, 1, "EXPONENTIAL_SMOOTHING", 0.60);
+            return new DemandForecast(book, forecastDate, 1, "EXPONENTIAL_SMOOTHING", new java.math.BigDecimal("0.60"));
         }
         
         // Apply exponential smoothing
@@ -154,7 +154,7 @@ public class DemandForecastService {
         
         int predictedDemand = Math.max(1, (int) Math.round(smoothedValue * periodMonths));
         
-        return new DemandForecast(book, forecastDate, predictedDemand, "EXPONENTIAL_SMOOTHING", 0.75);
+        return new DemandForecast(book, forecastDate, predictedDemand, "EXPONENTIAL_SMOOTHING", new java.math.BigDecimal("0.75"));
     }
 
     /**
@@ -168,7 +168,7 @@ public class DemandForecastService {
         Map<LocalDate, Integer> monthlyDemand = getMonthlyDemandData(book, historicalOrders);
         
         if (monthlyDemand.size() < 3) {
-            return new DemandForecast(book, forecastDate, 1, "LINEAR_REGRESSION", 0.50);
+            return new DemandForecast(book, forecastDate, 1, "LINEAR_REGRESSION", new java.math.BigDecimal("0.50"));
         }
         
         // Simple linear regression calculation
@@ -196,7 +196,7 @@ public class DemandForecastService {
         
         int predictedDemand = Math.max(1, (int) Math.round(prediction));
         
-        return new DemandForecast(book, forecastDate, predictedDemand, "LINEAR_REGRESSION", 0.65);
+        return new DemandForecast(book, forecastDate, predictedDemand, "LINEAR_REGRESSION", new java.math.BigDecimal("0.65"));
     }
 
     /**
@@ -217,7 +217,7 @@ public class DemandForecastService {
             .setScale(0, RoundingMode.HALF_UP)
             .intValue();
         
-        return new DemandForecast(book, forecastDate, Math.max(1, adjustedDemand), "SEASONAL_ADJUSTED", 0.80);
+        return new DemandForecast(book, forecastDate, Math.max(1, adjustedDemand), "SEASONAL_ADJUSTED", new java.math.BigDecimal("0.80"));
     }
 
     /**
@@ -247,7 +247,7 @@ public class DemandForecastService {
             ? (int) Math.round(weightedSum / totalWeight)
             : 1;
         
-        return new DemandForecast(book, forecastDate, Math.max(1, ensemblePrediction), "ENSEMBLE", 0.85);
+        return new DemandForecast(book, forecastDate, Math.max(1, ensemblePrediction), "ENSEMBLE", new java.math.BigDecimal("0.85"));
     }
 
     /**

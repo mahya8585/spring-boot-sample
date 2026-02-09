@@ -67,7 +67,7 @@ public class OrderService {
         for (OrderItem item : order.getOrderItems()) {
             // Validate book exists
             Optional<Book> bookOpt = bookRepository.findById(item.getBook().getId());
-            if (!bookOpt.isPresent()) {
+            if (bookOpt.isEmpty()) {
                 throw new BookNotFoundException(item.getBook().getId());
             }
             
@@ -101,7 +101,7 @@ public class OrderService {
         logger.info("Confirming order with ID: {}", orderId);
         
         Optional<Order> orderOpt = orderRepository.findById(orderId);
-        if (!orderOpt.isPresent()) {
+        if (orderOpt.isEmpty()) {
             throw new OrderNotFoundException(orderId);
         }
         
@@ -113,7 +113,7 @@ public class OrderService {
         // Check inventory and reserve stock
         for (OrderItem item : order.getOrderItems()) {
             Optional<Inventory> inventoryOpt = inventoryRepository.findByBookId(item.getBook().getId());
-            if (!inventoryOpt.isPresent()) {
+            if (inventoryOpt.isEmpty()) {
                 throw new InventoryNotFoundException(item.getBook().getId());
             }
             
@@ -152,7 +152,7 @@ public class OrderService {
         logger.info("Updating order {} status to {}", orderId, newStatus);
         
         Optional<Order> orderOpt = orderRepository.findById(orderId);
-        if (!orderOpt.isPresent()) {
+        if (orderOpt.isEmpty()) {
             throw new OrderNotFoundException(orderId);
         }
         
@@ -267,7 +267,7 @@ public class OrderService {
     private synchronized String generateOrderNumber() {
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         Long count = orderRepository.count() + 1;
-        return String.format("ORD-%s-%04d", date, count);
+        return "ORD-%s-%04d".formatted(date, count);
     }
     
     /**

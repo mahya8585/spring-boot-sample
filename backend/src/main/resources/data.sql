@@ -45,11 +45,11 @@ WHERE NOT EXISTS (SELECT 1 FROM books);
 -- Book Authors (Only if books exist)
 INSERT INTO book_authors (book_id, author_id, author_type, display_order)
 SELECT * FROM (VALUES
-(1, 1, 'MAIN', 1),
-(2, 1, 'MAIN', 1),
-(3, 2, 'MAIN', 1),
-(4, 4, 'MAIN', 1),
-(5, 3, 'MAIN', 1)
+(1, 1, 'AUTHOR', 1),
+(2, 1, 'AUTHOR', 1),
+(3, 2, 'AUTHOR', 1),
+(4, 4, 'AUTHOR', 1),
+(5, 3, 'AUTHOR', 1)
 ) AS new_book_authors(book_id, author_id, author_type, display_order)
 WHERE EXISTS (SELECT 1 FROM books WHERE id = new_book_authors.book_id);
 

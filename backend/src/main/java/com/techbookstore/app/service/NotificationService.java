@@ -45,18 +45,19 @@ public class NotificationService {
         String recipients = determineAlertRecipients(alert);
         
         // Format alert message
-        String subject = String.format("技術トレンドアラート: %s - %s", 
+        String subject = "技術トレンドアラート: %s - %s".formatted(
             alert.getTechCategory(), alert.getSeverity());
         
-        String body = String.format(
-            "技術カテゴリ: %s\n" +
-            "アラート種別: %s\n" +
-            "重要度: %s\n" +
-            "メッセージ: %s\n" +
-            "影響金額: %s\n" +
-            "変化率: %s%%\n" +
-            "必要なアクション: %s\n" +
-            "検出日: %s",
+        String body = (
+            """
+            技術カテゴリ: %s
+            アラート種別: %s
+            重要度: %s
+            メッセージ: %s
+            影響金額: %s
+            変化率: %s%%
+            必要なアクション: %s
+            検出日: %s""").formatted(
             alert.getTechCategory(),
             alert.getAlertType(),
             alert.getSeverity(),
@@ -79,7 +80,7 @@ public class NotificationService {
     public void sendExecutiveReport(DashboardKpiDto kpis, LocalDate reportDate) {
         logger.info("Sending executive report for date: {}", reportDate);
         
-        String subject = String.format("技術専門書店 日次レポート - %s", reportDate);
+        String subject = "技術専門書店 日次レポート - %s".formatted(reportDate);
         
         String body = generateExecutiveReportBody(kpis, reportDate);
         
@@ -96,7 +97,7 @@ public class NotificationService {
     public void sendWeeklyReport(SalesReportDto salesReport) {
         logger.info("Sending weekly performance report");
         
-        String subject = String.format("週次売上レポート - %s to %s", 
+        String subject = "週次売上レポート - %s to %s".formatted(
             salesReport.getStartDate(), salesReport.getEndDate());
         
         String body = generateWeeklyReportBody(salesReport);
@@ -115,7 +116,7 @@ public class NotificationService {
                                           CustomerAnalyticsDto customers) {
         logger.info("Sending monthly executive report");
         
-        String subject = String.format("月次経営レポート - %s", LocalDate.now().minusMonths(1));
+        String subject = "月次経営レポート - %s".formatted(LocalDate.now().minusMonths(1));
         
         String body = generateMonthlyReportBody(kpis, sales, customers);
         
@@ -132,7 +133,7 @@ public class NotificationService {
     public void sendInventoryAlert(String category, String alertType, String message) {
         logger.info("Sending inventory alert for category: {}", category);
         
-        String subject = String.format("在庫アラート: %s - %s", category, alertType);
+        String subject = "在庫アラート: %s - %s".formatted(category, alertType);
         
         // Send to inventory managers
         sendEmail("inventory@techbookstore.com", subject, message);
