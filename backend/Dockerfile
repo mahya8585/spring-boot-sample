@@ -8,8 +8,8 @@ WORKDIR /app
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
 
-# Make mvnw executable
-RUN chmod +x ./mvnw
+# Normalize line endings and make mvnw executable
+RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
 # Download dependencies (this layer will be cached if pom.xml doesn't change)
 RUN ./mvnw dependency:go-offline -B

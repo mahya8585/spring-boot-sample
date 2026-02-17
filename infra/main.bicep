@@ -45,7 +45,7 @@ var userManagedIdentityName = 'azid${resourceToken}'
 // Tags for all resources
 var tags = {
   'azd-env-name': environmentName
-  'project': 'TechBookStore'
+  project: 'TechBookStore'
 }
 
 // User-Assigned Managed Identity for Container Apps
@@ -376,6 +376,10 @@ resource backendApp 'Microsoft.App/containerApps@2024-03-01' = {
               value: keyVault.properties.vaultUri
             }
             {
+              name: 'AZURE_CLIENT_ID'
+              value: userManagedIdentity.properties.clientId
+            }
+            {
               name: 'APPLICATIONINSIGHTS_INSTRUMENTATION_KEY'
               secretRef: 'appinsights-key'
             }
@@ -492,6 +496,7 @@ output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = subscription().tenantId
 output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
 output AZURE_RESOURCE_GROUP string = resourceGroup().name
+output RESOURCE_GROUP_ID string = resourceGroup().id
 
 output AZURE_CONTAINER_REGISTRY_NAME string = containerRegistry.name
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.properties.loginServer

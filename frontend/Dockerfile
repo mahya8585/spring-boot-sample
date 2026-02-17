@@ -8,17 +8,16 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY public ./public
 COPY src ./src
 
-# Set environment for legacy OpenSSL support (React 16 with older webpack)
-ENV NODE_OPTIONS=--openssl-legacy-provider
+ENV SKIP_PREFLIGHT_CHECK=true
 
 # Build the application
-RUN npm run build
+RUN npx react-scripts build
 
 # Stage 2: Production stage with Nginx
 FROM nginx:1.25-alpine
@@ -26,8 +25,8 @@ FROM nginx:1.25-alpine
 # Install curl for health checks
 RUN apk add --no-cache curl
 
-# Copy custom nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy template nginx configuration (envsubst at startup)
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Copy built files from builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
