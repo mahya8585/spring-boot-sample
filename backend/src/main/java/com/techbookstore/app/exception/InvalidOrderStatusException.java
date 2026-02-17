@@ -10,6 +10,6 @@ public class InvalidOrderStatusException extends RuntimeException {
     }
     
     public InvalidOrderStatusException(String currentStatus, String newStatus) {
-        super(String.format("Invalid status transition from %s to %s", currentStatus, newStatus));
+        super("Invalid status transition from %s to %s".formatted(currentStatus, newStatus));
     }
 }

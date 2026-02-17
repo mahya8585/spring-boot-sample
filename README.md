@@ -2,12 +2,11 @@
 
 TechBookStore は、技術書専門書店のための **動作する** サンプルアプリケーションです：
 
-- **バックエンド**: Spring Boot 2.3.12（Java 8 対応）REST API
+- **バックエンド**: Spring Boot 3.5.0（Java 21）REST API
 - **フロントエンド**: React 16 + Material-UI 4 シングルページアプリ
 - **データ**: ローカル開発用 H2 インメモリデータベース（シード済み）、ステージング/本番用 PostgreSQL/Redis
 - **I18n**: 日本語 / 英語 UI
 
-このリポジトリは、現実的な「レガシー基盤」として実験できるよう、あえて古いスタックを採用しています。
 
 ## できること
 
@@ -30,44 +29,14 @@ TechBookStore は、技術書専門書店のための **動作する** サンプ
 
 ### 前提条件
 
-- JDK（Java **8** 推奨。Java 8 バイトコードでコンパイル）
+- JDK 21
 - Node.js（Create React App 4 との互換性のため古いバージョン推奨。Docker ビルドは Node 12）
 - npm
 
 新しい Node.js で `ERR_OSSL_EVP_UNSUPPORTED` が出る場合は、`NODE_OPTIONS=--openssl-legacy-provider` を設定してください。
 
-### オプションA: 付属スクリプトで起動
 
-すべて起動（バックエンド＋フロントエンド）:
-
-```bash
-./start-app.sh
-```
-
-ステータス確認:
-
-```bash
-./status-app.sh
-```
-
-停止:
-
-```bash
-./stop-app.sh
-```
-
-補足:
-
-- スクリプトは以下にログを出力します：
-  - `/tmp/techbookstore_backend.log`
-  - `/tmp/techbookstore_frontend.log`
-- PIDは以下に保存されます：
-  - `/tmp/techbookstore_backend.pid`
-  - `/tmp/techbookstore_frontend.pid`
-- `start-app.sh` は **`/workspace`** 配下での実行を想定しています。
-  - Dev Container/コンテナ化ワークスペース以外の場合は、下記「オプションB（手動起動）」を利用してください。
-
-### オプションB: 手動起動（どの環境でも動作）
+### 手動起動（どの環境でも動作）
 
 バックエンド（Spring Boot）:
 
@@ -88,7 +57,8 @@ npm start
 
 - フロントエンド: http://localhost:3000
 - バックエンドヘルス: http://localhost:8080/actuator/health
-- Swagger UI（Springfox）: http://localhost:8080/swagger-ui.html
+- Swagger UI（springdoc-openapi）: http://localhost:8080/swagger-ui/index.html
+- OpenAPI仕様（JSON）: http://localhost:8080/v3/api-docs
 - H2 コンソール（dev プロファイル）: http://localhost:8080/h2-console
   - JDBC URL: `jdbc:h2:mem:testdb`
   - ユーザー名: `sa`
@@ -149,7 +119,7 @@ Prod プロファイルの変数は `AZURE_*` プレフィックス（Azure 用�
 - `/inventory`: 在庫操作・分析
 - `/reports`: ダッシュボード・レポート系エンドポイント
 
-API ドキュメントは Springfox（Swagger 2）で `/swagger-ui.html` から参照できます。
+API ドキュメントは springdoc-openapi（OpenAPI 3）で `/swagger-ui/index.html` から参照できます。
 
 ## テスト
 
@@ -202,8 +172,12 @@ I18n バリデーション補助：
 
 [MIT ライセンス](https://gist.githubusercontent.com/shinyay/56e54ee4c0e22db8211e05e70a63247e/raw/f3ac65a05ed8c8ea70b653875ccac0c6dbc10ba1/LICENSE) で公開しています。
 
-## 著者
+## 元著者
 
 - GitHub: <https://github.com/shinyay>
 - Twitter: <https://twitter.com/yanashin18618>
 - Mastodon: <https://mastodon.social/@yanashin>
+
+## 変更者
+- GitHub: <https://github.com/mahya8585>
+- Twitter: <https://twitter.com/maaya8585>

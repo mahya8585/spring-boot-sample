@@ -1,5 +1,6 @@
 package com.techbookstore.app.controller;
 
+import com.techbookstore.app.config.TestSecurityConfig;
 import com.techbookstore.app.dto.*;
 import com.techbookstore.app.service.AnalyticsService;
 import com.techbookstore.app.service.ReportService;
@@ -7,18 +8,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest({ReportController.class, com.techbookstore.app.exception.GlobalExceptionHandler.class})
+@Import(TestSecurityConfig.class)
 public class AnalyticsControllerTest {
 
     @Autowired

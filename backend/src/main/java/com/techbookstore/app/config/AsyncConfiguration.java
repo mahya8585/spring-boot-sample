@@ -14,13 +14,13 @@ import java.util.concurrent.Executor;
 @Configuration
 @EnableAsync
 public class AsyncConfiguration {
-    
+
     /**
      * Executor for integrated analysis tasks
      * Configured for optimal performance with Phase 4 requirements
      */
     @Bean(name = "integratedAnalysisExecutor")
-    public Executor integratedAnalysisExecutor() {
+    Executor integratedAnalysisExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
         executor.setMaxPoolSize(8);
@@ -32,13 +32,13 @@ public class AsyncConfiguration {
         executor.initialize();
         return executor;
     }
-    
+
     /**
      * Executor for dashboard data processing
      * Fast executor for real-time dashboard updates
      */
     @Bean(name = "dashboardExecutor")
-    public Executor dashboardExecutor() {
+    Executor dashboardExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(4);
@@ -50,13 +50,13 @@ public class AsyncConfiguration {
         executor.initialize();
         return executor;
     }
-    
+
     /**
      * Executor for batch processing
      * Heavy-duty executor for batch optimization tasks
      */
     @Bean(name = "batchProcessingExecutor")
-    public Executor batchProcessingExecutor() {
+    Executor batchProcessingExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(6);

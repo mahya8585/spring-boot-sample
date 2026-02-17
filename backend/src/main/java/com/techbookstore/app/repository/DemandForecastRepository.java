@@ -40,7 +40,7 @@ public interface DemandForecastRepository extends JpaRepository<DemandForecast, 
      * Find high confidence forecasts
      */
     @Query("SELECT d FROM DemandForecast d WHERE d.confidence >= :minConfidence AND d.forecastDate = :forecastDate ORDER BY d.confidence DESC")
-    List<DemandForecast> findHighConfidenceForecasts(@Param("minConfidence") Double minConfidence, @Param("forecastDate") LocalDate forecastDate);
+    List<DemandForecast> findHighConfidenceForecasts(@Param("minConfidence") java.math.BigDecimal minConfidence, @Param("forecastDate") LocalDate forecastDate);
 
     /**
      * Delete old forecast data

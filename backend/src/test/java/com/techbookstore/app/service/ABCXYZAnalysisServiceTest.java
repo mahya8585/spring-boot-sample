@@ -113,7 +113,7 @@ class ABCXYZAnalysisServiceTest {
         assertNotNull(categoryResults);
         assertTrue(categoryResults.containsKey("AX"));
         assertEquals(1, categoryResults.get("AX").size());
-        assertEquals("A", categoryResults.get("AX").get(0).getAbcCategory());
-        assertEquals("X", categoryResults.get("AX").get(0).getXyzCategory());
+        assertEquals("A", categoryResults.get("AX").getFirst().getAbcCategory());
+        assertEquals("X", categoryResults.get("AX").getFirst().getXyzCategory());
     }
 }

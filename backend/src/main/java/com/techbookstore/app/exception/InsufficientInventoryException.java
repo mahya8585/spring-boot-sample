@@ -10,7 +10,7 @@ public class InsufficientInventoryException extends RuntimeException {
     }
     
     public InsufficientInventoryException(String bookTitle, int requested, int available) {
-        super(String.format("Insufficient inventory for '%s': requested %d, available %d", 
-                           bookTitle, requested, available));
+        super("Insufficient inventory for '%s': requested %d, available %d".formatted(
+            bookTitle, requested, available));
     }
 }

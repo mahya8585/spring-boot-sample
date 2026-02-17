@@ -16,11 +16,20 @@ spring:
     encoding: UTF-8
     fallback-to-system-locale: false
     use-code-as-default-message: false
+  # Azure Key Vault Configuration
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          property-sources:
+            - endpoint: ${AZURE_KEYVAULT_ENDPOINT}
+              credential:
+                managed-identity-enabled: true
 
 ---
 # 開発環境（H2 Database）
 spring:
-  profiles: dev
+  config.activate.on-profile: dev
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
@@ -41,17 +50,21 @@ spring:
       mode: always
       data-locations: classpath:data.sql
   # Redis設定（Dev Container環境）
-  redis:
-    host: ${REDIS_HOST:redis}
-    port: ${REDIS_PORT:6379}
-    database: 0
-    timeout: 2000ms
-    lettuce:
-      pool:
-        max-active: 10
-        max-idle: 10
-        min-idle: 1
-        max-wait: -1ms
+  # redis:
+  #   lettuce:
+  #     pool:
+  #       max-active: 10
+  #       max-idle: 10
+  #       min-idle: 1
+  #       max-wait: -1ms
+  # Redis設定（Dev Container環境）
+  data.redis.database: 0
+  # Redis設定（Dev Container環境）
+  data.redis.host: ${REDIS_HOST:redis}
+  # Redis設定（Dev Container環境）
+  data.redis.port: ${REDIS_PORT:6379}
+  # Redis設定（Dev Container環境）
+  data.redis.timeout: 2000ms
 
 app:
   cors:
@@ -65,16 +78,16 @@ logging:
 ---
 # プレ本番環境（PostgreSQL）
 spring:
-  profiles: staging
+  config.activate.on-profile: staging
   datasource:
     url: jdbc:postgresql://localhost:5432/techbookstore
     driver-class-name: org.postgresql.Driver
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    username: ${db-username}
+    password: ${db-password}
   jpa:
     hibernate:
       ddl-auto: validate
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
 app:
@@ -84,21 +97,23 @@ app:
 ---
 # 本番環境（Azure）
 spring:
-  profiles: prod
+  config.activate.on-profile: prod
   datasource:
-    url: jdbc:postgresql://${AZURE_POSTGRESQL_HOST}:5432/${AZURE_POSTGRESQL_DATABASE}?ssl=true&sslmode=require
-    username: ${AZURE_POSTGRESQL_USERNAME}
-    password: ${AZURE_POSTGRESQL_PASSWORD}
+    url: jdbc:postgresql://${azure-postgresql-host}:5432/${azure-postgresql-database}?ssl=true&sslmode=require
+    username: ${azure-postgresql-username}
+    password: ${azure-postgresql-password}
   jpa:
     hibernate:
-      ddl-auto: validate
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
-  redis:
-    host: ${AZURE_REDIS_HOST}
-    port: 6380
-    password: ${AZURE_REDIS_KEY}
-    ssl: true
+  data:
+    redis:
+      host: ${azure-redis-host}
+      password: ${azure-redis-key}
+      port: 6380
+      ssl:
+        enabled: true
 
 app:
   cors:

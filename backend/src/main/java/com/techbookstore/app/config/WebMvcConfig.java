@@ -17,18 +17,18 @@ import java.util.Locale;
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-    
+
     @Bean
-    public LocaleResolver localeResolver() {
+    LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setDefaultLocale(Locale.JAPANESE);
         resolver.setCookieName("language");
         resolver.setCookieMaxAge(3600 * 24 * 30); // 30 days
         return resolver;
     }
-    
+
     @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor() {
+    LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
         interceptor.setParamName("lang");
         return interceptor;
@@ -38,9 +38,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
     }
-    
+
     @Bean
-    public MessageSource messageSource() {
+    MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("messages");
         messageSource.setDefaultEncoding("UTF-8");

@@ -1,5 +1,6 @@
 package com.techbookstore.app.controller;
 
+import com.techbookstore.app.config.TestSecurityConfig;
 import com.techbookstore.app.dto.CustomReportRequest;
 import com.techbookstore.app.dto.SalesReportDto;
 import com.techbookstore.app.service.ReportService;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest({ReportController.class, com.techbookstore.app.exception.GlobalExceptionHandler.class})
+@Import(TestSecurityConfig.class)
 class ReportControllerTest {
 
     @Autowired

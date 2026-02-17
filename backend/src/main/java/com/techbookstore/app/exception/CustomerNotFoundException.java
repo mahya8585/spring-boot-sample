@@ -14,6 +14,6 @@ public class CustomerNotFoundException extends RuntimeException {
     }
     
     public CustomerNotFoundException(String field, Object value) {
-        super(String.format("Customer not found with %s: %s", field, value));
+        super("Customer not found with %s: %s".formatted(field, value));
     }
 }
