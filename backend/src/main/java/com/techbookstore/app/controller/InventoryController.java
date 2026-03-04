@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/inventory")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "${app.cors.allowed-origins:*}")
 public class InventoryController {
 
     @Autowired
@@ -69,11 +69,13 @@ public class InventoryController {
         
         if (inventoryOpt.isPresent()) {
             Inventory inventory = inventoryOpt.get();
+            Integer currentStoreStock = inventory.getStoreStock() != null ? inventory.getStoreStock() : 0;
+            Integer currentWarehouseStock = inventory.getWarehouseStock() != null ? inventory.getWarehouseStock() : 0;
             
             if ("STORE".equals(request.getLocation())) {
-                inventory.setStoreStock(inventory.getStoreStock() + request.getQuantity());
+                inventory.setStoreStock(currentStoreStock + request.getQuantity());
             } else {
-                inventory.setWarehouseStock(inventory.getWarehouseStock() + request.getQuantity());
+                inventory.setWarehouseStock(currentWarehouseStock + request.getQuantity());
             }
             
             inventory.setLastReceivedDate(LocalDate.now());
@@ -90,11 +92,12 @@ public class InventoryController {
         
         if (inventoryOpt.isPresent()) {
             Inventory inventory = inventoryOpt.get();
+            Integer currentStoreStock = inventory.getStoreStock() != null ? inventory.getStoreStock() : 0;
             
             // Fixed: Check if enough stock is available AND store stock is sufficient
             if (inventory.getAvailableStock() >= request.getQuantity() &&
-                inventory.getStoreStock() >= request.getQuantity()) {
-                inventory.setStoreStock(inventory.getStoreStock() - request.getQuantity());
+                currentStoreStock >= request.getQuantity()) {
+                inventory.setStoreStock(currentStoreStock - request.getQuantity());
                 inventory.setLastSoldDate(LocalDate.now());
                 Inventory savedInventory = inventoryRepository.save(inventory);
                 return ResponseEntity.ok(new InventoryDto(savedInventory));
@@ -108,6 +111,16 @@ public class InventoryController {
 
     @PutMapping("/adjust")
     public ResponseEntity<InventoryDto> adjustStock(@RequestBody AdjustStockRequest request) {
+        if (request.getBookId() == null) {
+            throw new IllegalArgumentException("bookId is required");
+        }
+        if (request.getStoreStock() == null || request.getWarehouseStock() == null) {
+            throw new IllegalArgumentException("storeStock and warehouseStock are required");
+        }
+        if (request.getStoreStock() < 0 || request.getWarehouseStock() < 0) {
+            throw new IllegalArgumentException("storeStock and warehouseStock must be 0 or greater");
+        }
+
         Optional<Inventory> inventoryOpt = inventoryRepository.findByBookId(request.getBookId());
         
         if (inventoryOpt.isPresent()) {

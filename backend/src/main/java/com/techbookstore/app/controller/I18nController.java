@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/v1/i18n")
-@CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:3000}")
+@CrossOrigin(origins = "${app.cors.allowed-origins:*}")
 public class I18nController {
     
     private final MessageService messageService;
