@@ -173,6 +173,76 @@ I18n バリデーション補助：
 - バックエンドコンテナはデフォルトで `SPRING_PROFILES_ACTIVE=prod` を設定します。
 - `prod` では、バックエンドは Key Vault 経由で PostgreSQL/Redis のシークレットを取得します（「設定」参照）。
 
+## Azure アーキテクチャ
+
+本番環境は Azure Container Apps を中心に構成されています。
+
+```mermaid
+graph TB
+    subgraph "Internet"
+        User["👤 ユーザー"]
+    end
+
+    subgraph "Azure / Resource Group: rg-techbookstore-prod"
+
+        subgraph "Container Apps Environment"
+            Frontend["Frontend Container App<br/>(React 16 + Nginx)<br/>Port 80"]
+            Backend["Backend Container App<br/>(Spring Boot 3.5.11 / Java 21)<br/>Port 8080"]
+        end
+
+        ACR["Azure Container Registry<br/>(コンテナイメージ)"]
+        MI["User-Assigned<br/>Managed Identity"]
+
+        subgraph "データ層"
+            PostgreSQL["Azure Database for<br/>PostgreSQL Flexible Server<br/>(v17)"]
+            Redis["Azure Cache for Redis<br/>(Basic C0 / SSL:6380)"]
+        end
+
+        subgraph "セキュリティ・監視"
+            KeyVault["Azure Key Vault<br/>(シークレット管理)"]
+            AppInsights["Application Insights"]
+            LogAnalytics["Log Analytics<br/>Workspace"]
+        end
+    end
+
+    User -->|HTTPS| Frontend
+    User -->|HTTPS| Backend
+    Frontend -->|HTTP| Backend
+
+    MI -.->|AcrPull| ACR
+    ACR -.->|イメージ配信| Frontend
+    ACR -.->|イメージ配信| Backend
+
+    Backend -->|Managed Identity| PostgreSQL
+    Backend -->|Managed Identity| Redis
+    Backend -->|Managed Identity| KeyVault
+    Backend -.->|テレメトリ| AppInsights
+    AppInsights -.-> LogAnalytics
+```
+
+### リソース間の接続方式
+
+| 接続元 | 接続先 | 認証方式 |
+|--------|--------|----------|
+| Container Apps → Container Registry | AcrPull | User-Assigned Managed Identity |
+| Backend → PostgreSQL | Service Connector | System-Assigned Managed Identity |
+| Backend → Redis | Service Connector | System-Assigned Managed Identity |
+| Backend → Key Vault | RBAC | System-Assigned Managed Identity |
+| Backend → Application Insights | Instrumentation Key | 環境変数 |
+| Frontend → Backend | HTTP | 内部通信 |
+
+### 主なリソース
+
+| リソース | SKU | 用途 |
+|----------|-----|------|
+| Container Apps (Backend) | Consumption (1 vCPU / 2 GiB, 1-3 replicas) | Spring Boot API |
+| Container Apps (Frontend) | Consumption (0.5 vCPU / 1 GiB, 1-2 replicas) | React SPA 配信 |
+| PostgreSQL Flexible Server | Standard_D2ds_v5 (2 vCore / 8 GB) | アプリケーション DB |
+| Azure Cache for Redis | Basic C0 (250 MB) | キャッシュ・セッション |
+| Container Registry | Basic | Docker イメージ管理 |
+| Key Vault | Standard (RBAC) | シークレット管理 |
+| Application Insights + Log Analytics | Pay-as-you-go | 監視・ログ |
+
 ## セキュリティ・本番利用時の注意
 
 このリポジトリはサンプルアプリです。
