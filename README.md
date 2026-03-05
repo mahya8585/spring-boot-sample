@@ -2,7 +2,7 @@
 
 TechBookStore は、技術書専門書店のための **動作する** サンプルアプリケーションです：
 
-- **バックエンド**: Spring Boot 3.5.0（Java 21）REST API
+- **バックエンド**: Spring Boot 3.5.11（Java 21）REST API
 - **フロントエンド**: React 16 + Material-UI 4 シングルページアプリ
 - **データ**: ローカル開発用 H2 インメモリデータベース（シード済み）、ステージング/本番用 PostgreSQL/Redis
 - **I18n**: 日本語 / 英語 UI
@@ -20,17 +20,15 @@ TechBookStore は、技術書専門書店のための **動作する** サンプ
 
 - `backend/`: Spring Boot API
 - `frontend/`: React UI
-- `start-app.sh`: バックエンド＋フロントエンド同時起動（ログ・PIDは `/tmp` に出力）
-- `status-app.sh`: プロセス・ヘルスチェック
-- `stop-app.sh`: プロセス停止（`--clean-logs` オプションあり）
-- `Dockerfile`: フロントエンドビルド＋バックエンド jar を 1 コンテナ化
+- `backend/Dockerfile`: Spring Boot アプリケーションのマルチステージビルド（Java 21）
+- `frontend/Dockerfile`: React アプリケーションのマルチステージビルド（Node 16 → Nginx）
 
 ## クイックスタート（ローカル開発）
 
 ### 前提条件
 
 - JDK 21
-- Node.js（Create React App 4 との互換性のため古いバージョン推奨。Docker ビルドは Node 12）
+- Node.js（Docker ビルドは Node 16）
 - npm
 
 新しい Node.js で `ERR_OSSL_EVP_UNSUPPORTED` が出る場合は、`NODE_OPTIONS=--openssl-legacy-provider` を設定してください。
@@ -85,7 +83,7 @@ npm start
 主な環境変数：
 
 - `SPRING_PROFILES_ACTIVE`: `dev`（デフォルト）、`staging`、`prod`
-- `CORS_ALLOWED_ORIGINS`: デフォルト `http://localhost:3000`
+- `CORS_ALLOWED_ORIGINS`: デフォルト `*`
 
 Dev プロファイル（Redisは任意）：
 
@@ -96,15 +94,21 @@ Dev プロファイル（Redisは任意）：
 
 - `SPRING_CACHE_TYPE=simple`（`spring.cache.type=simple` と同等）
 
+Azure Key Vault 連携：
+
+- `AZURE_KEYVAULT_ENDPOINT`: Azure Key Vault エンドポイント URL（マネージド ID 認証）
+- Key Vault からシークレットを自動取得（staging/prod プロファイル用）
+
 Staging プロファイル（PostgreSQL）：
 
-- `DB_USERNAME`（デフォルト: `postgres`）
-- `DB_PASSWORD`（デフォルト: `postgres`）
+- `db-username`: データベースユーザー名（Key Vault シークレット名）
+- `db-password`: データベースパスワード（Key Vault シークレット名）
 
-Prod プロファイルの変数は `AZURE_*` プレフィックス（Azure 用）です：
+Prod プロファイルの変数は Key Vault シークレット名（Azure 用）です：
 
-- `AZURE_POSTGRESQL_HOST`, `AZURE_POSTGRESQL_DATABASE`, `AZURE_POSTGRESQL_USERNAME`, `AZURE_POSTGRESQL_PASSWORD`
-- `AZURE_REDIS_HOST`, `AZURE_REDIS_KEY`
+- `azure-postgresql-host`, `azure-postgresql-database`, `azure-postgresql-username`, `azure-postgresql-password`
+- `azure-redis-host`, `azure-redis-key`
+- `APPLICATIONINSIGHTS_INSTRUMENTATION_KEY`: Application Insights インストルメンテーションキー
 
 ## データモデルとシードデータ
 
@@ -150,16 +154,24 @@ I18n バリデーション補助：
 
 ## Docker
 
-ルートの `Dockerfile` で以下をビルドします：
+バックエンドとフロントエンドは個別の Dockerfile でビルドします：
 
-1) フロントエンドの静的ビルド
-2) バックエンド jar
-3) バックエンドをポート `8080` で起動
+### バックエンド（`backend/Dockerfile`）
+
+1) `eclipse-temurin:21-jdk-jammy` でビルド
+2) `eclipse-temurin:21-jre-jammy` でランタイムイメージ作成
+3) ポート `8080` で起動
+
+### フロントエンド（`frontend/Dockerfile`）
+
+1) `node:16-alpine` でフロントエンドをビルド
+2) `nginx:1.25-alpine` で静的ファイルを配信
+3) ポート `80` で起動
 
 重要：
 
-- コンテナはデフォルトで `SPRING_PROFILES_ACTIVE=prod` を設定します。
-- `prod` では、バックエンドは PostgreSQL/Redis の環境変数を期待します（「設定」参照）。
+- バックエンドコンテナはデフォルトで `SPRING_PROFILES_ACTIVE=prod` を設定します。
+- `prod` では、バックエンドは Key Vault 経由で PostgreSQL/Redis のシークレットを取得します（「設定」参照）。
 
 ## セキュリティ・本番利用時の注意
 
